@@ -225,7 +225,7 @@ describe('server.js', () => {
       test('[26] responds with a 404 if no action with given id', async () => {
         const res = await request(server).get('/api/actions/11')
         expect(res.status).toBe(404)
-      }, 750)
+      })
     })
   })
 })

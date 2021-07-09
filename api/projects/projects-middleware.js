@@ -20,19 +20,8 @@ async function validateProjectId(req, res, next) {
     }
 }
 
-async function validateProject(req, res, next) {
-    const { name, description } = req.body
-    if (!name || !description) {
-        res.status(400).json({
-            message: "Missing required fields."
-        })
-    } else {
-        next()
-    }
-}
 
 
 module.exports = {
     validateProjectId,
-    validateProject,
 }

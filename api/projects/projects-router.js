@@ -2,7 +2,7 @@
 const express = require('express')
 const Project = require('./projects-model')
 
-const { validateProjectId, validateProject } = require('./projects-middleware')
+const { validateProjectId, } = require('./projects-middleware')
 
 const router = express.Router()
 
@@ -37,8 +37,22 @@ router.post("/", (req, res) => {
 });
 
 // [PUT] update a project with id
-router.put('/:id', (req, res, next) => {
-
+router.put('/:id', validateProjectId, (req, res, next) => {
+    const { name, description, completed } = req.body
+    Project.update(req.params.id, { name, description, completed })
+        .then(() => {
+            return Project.get(req.params.id)
+        })
+        .then(project => {
+            if (!name || !description || !completed) {
+                res.status(400).json({
+                    message: 'provide the correct stuff my guy'
+                })
+            } else {
+                res.json(project)
+            }
+        })
+        .catch(next)
 })
 
 // [DELETE] a project with id

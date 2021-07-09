@@ -2,7 +2,7 @@
 const express = require('express')
 const Project = require('./projects-model')
 
-const { validateProjectId } = require('./projects-middleware')
+const { validateProjectId, validateProject } = require('./projects-middleware')
 
 const router = express.Router()
 
@@ -21,8 +21,14 @@ router.get('/:id', validateProjectId, (req, res) => {
 })
 
 // [POST] a new project
-router.post('/', (req, res, next) => {
+router.post('/', validateProject, (req, res, next) => {
+    const { name, description } = req.body
 
+    Project.insert({ name, description })
+        .then(newProject => {
+            res.status(400).json(newProject)
+        })
+        .catch(next)
 })
 
 // [PUT] update a project with id

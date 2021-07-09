@@ -21,15 +21,20 @@ router.get('/:id', validateProjectId, (req, res) => {
 })
 
 // [POST] a new project
-router.post('/', validateProject, (req, res, next) => {
-    const { name, description } = req.body
-
-    Project.insert({ name, description })
-        .then(newProject => {
-            res.status(400).json(newProject)
+router.post("/", (req, res) => {
+    const { name, description } = req.body;
+    Project.insert(req.body)
+        .then((newProject) => {
+            if (!name || !description) {
+                res.status(400);
+            } else {
+                res.json(newProject);
+            }
         })
-        .catch(next)
-})
+        .catch((err) => {
+            res.status(400).json({ message: err.message });
+        });
+});
 
 // [PUT] update a project with id
 router.put('/:id', (req, res, next) => {

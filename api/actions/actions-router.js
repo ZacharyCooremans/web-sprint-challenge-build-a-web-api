@@ -20,9 +20,25 @@ router.get('/:id', validateActionId, (req, res) => {
     res.json(req.action)
 })
 
-// [POST] a action
+// [POST] a new action
 router.post('/', (req, res, next) => {
-
+    const { notes, description, project_id } = req.body
+    Actions.insert(req.body)
+        .then(newAction => {
+            if (!notes || !description || !project_id) {
+                res.status(400).json({
+                    message: "AHAFJF"
+                })
+            } else {
+                res.json(newAction)
+            }
+        })
+        .catch((err) => {
+            res.status(400).json({
+                message: err.message,
+                custom: "IJFOIHGF"
+            })
+        })
 })
 
 // [PUT] change a action
@@ -31,8 +47,13 @@ router.put('/:id', (req, res, next) => {
 })
 
 // [DELETE] a action by id
-router.get('/:id', (req, res, next) => {
-
+router.get('/:id', validateActionId, async (req, res, next) => {
+    try {
+        await Actions.remove(req.params.id)
+        res.json(req.project)
+    } catch (err) {
+        next(err)
+    }
 })
 
 router.use((err, req, res, next) => { // eslint-disable-line

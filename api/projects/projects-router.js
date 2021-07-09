@@ -38,13 +38,13 @@ router.post("/", (req, res) => {
 
 // [PUT] update a project with id
 router.put('/:id', validateProjectId, (req, res, next) => {
-    const { name, description, completed } = req.body
-    Project.update(req.params.id, { name, description, completed })
+    const changes = req.body
+    Project.update(req.params.id, changes)
         .then(() => {
             return Project.get(req.params.id)
         })
         .then(project => {
-            if (!name || !description || !completed) {
+            if (!changes) {
                 res.status(400).json({
                     message: 'provide the correct stuff my guy'
                 })

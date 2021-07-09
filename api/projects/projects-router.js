@@ -1,7 +1,8 @@
 // Write your "projects" router here!
 const express = require('express')
-//const server = require("../server");
 const Project = require('./projects-model')
+
+const { validateProjectId } = require('./projects-middleware')
 
 const router = express.Router()
 
@@ -15,8 +16,8 @@ router.get('/', (req, res, next) => {
 })
 
 // [GET] a project with id
-router.get('/:id', (req, res, next) => {
-
+router.get('/:id', validateProjectId, (req, res) => {
+    res.json(req.project)
 })
 
 // [POST] a new project

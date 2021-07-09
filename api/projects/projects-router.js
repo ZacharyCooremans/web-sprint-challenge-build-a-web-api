@@ -66,8 +66,13 @@ router.delete('/:id', validateProjectId, async (req, res, next) => {
 })
 
 // [GET] actions with project id
-router.get('/:id/actions', (req, res, next) => {
-
+router.get('/:id/actions', validateProjectId, async (req, res, next) => {
+    try {
+        const result = await Project.getProjectActions(req.params.id)
+        res.json(result)
+    } catch (err) {
+        next(err)
+    }
 })
 
 router.use((err, req, res, next) => { // eslint-disable-line

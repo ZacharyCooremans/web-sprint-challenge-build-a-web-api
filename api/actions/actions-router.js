@@ -42,7 +42,22 @@ router.post('/', (req, res, next) => {
 })
 
 // [PUT] change a action
-router.put('/:id', (req, res, next) => {
+router.put('/:id', validateActionId, (req, res, next) => {
+    const changes = req.body
+    Actions.update(req.params.id, changes)
+        .then(() => {
+            return Actions.get(req.params.id)
+        })
+        .then(action => {
+            if (!changes) {
+                res.status(400).json({
+                    message: 'provide the correct stuff'
+                })
+            } else {
+                res.json(action)
+            }
+        })
+        .catch(next)
 
 })
 

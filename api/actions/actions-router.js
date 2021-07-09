@@ -47,10 +47,10 @@ router.put('/:id', (req, res, next) => {
 })
 
 // [DELETE] a action by id
-router.get('/:id', validateActionId, async (req, res, next) => {
+router.delete('/:id', validateActionId, async (req, res, next) => {
     try {
         await Actions.remove(req.params.id)
-        res.json(req.project)
+        res.json(req.action)
     } catch (err) {
         next(err)
     }
